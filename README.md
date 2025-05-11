@@ -95,4 +95,36 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 
 ## License
 
+## Architecture  
+
 Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+
+                             +------------------------+
+                             |         Docker         |
+                             +-----------+------------+
+                                         |
+            +----------------------------v---------------------------+
+            |                  Ollama Container                      |
+            |  - nomic-embed-text  (embeddings)                      |
+            |  - llama3            (generation / chat)               |
+            |                                                        |
+            |  Exposed APIs: /embeddings  /generate  /chat           |
+            +-----------+---------------------+----------------------+
+                        ^                     |
+                        | HTTP                | HTTP (prompt → answer)
+                        |                     |
+      (one-time)        |                     |
+ Ingestion Script   +---+---+                 |
+  (Backend only)    |       |                 |
+      PDFs -------->| BE    |-----------------+
+                    |       |   similarity search
+                    |       |   on local vector.bin
+                    +---+---+
+                        |
+                        | REST  /ask
+                        v
+              +---------+---------+
+              |   Frontend (UI)   |
+              |  React chat box   |
+              +-------------------+
+

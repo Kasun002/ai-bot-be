@@ -30,7 +30,7 @@ export class OllamaController {
 
         const top = scored.sort((a, b) => b.score - a.score)[0];
 
-        if (!top || top.score < 0.6) {
+        if (!top || top.score < 0.6) {  
             return { answer: 'Sorry, this is out of my context.' };
         }
 
